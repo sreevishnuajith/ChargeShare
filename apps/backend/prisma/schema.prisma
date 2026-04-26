@@ -1,0 +1,96 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Building {
+  id        Int       @id @default(autoincrement())
+  name      String
+  address   String?
+  users     User[]
+  chargers  Charger[]
+  createdAt DateTime  @default(now())
+}
+
+model User {
+  id            Int       @id @default(autoincrement())
+  fullName      String
+  email         String    @unique
+  passwordHash  String
+  role          UserRole  @default(RESIDENT)
+  buildingId    Int
+  building      Building  @relation(fields: [buildingId], references: [id])
+  bookings      Booking[]
+  invoices      Invoice[]
+  createdAt     DateTime  @default(now())
+}
+
+model Charger {
+  id           Int         @id @default(autoincrement())
+  label        String
+  location     String?
+  powerKw      Float
+  isActive     Boolean     @default(true)
+  buildingId   Int
+  building     Building    @relation(fields: [buildingId], references: [id])
+  bookings     Booking[]
+  createdAt    DateTime    @default(now())
+}
+
+model Booking {
+  id           Int           @id @default(autoincrement())
+  userId        Int
+  chargerId     Int
+  startAt       DateTime
+  endAt         DateTime
+  status        BookingStatus @default(CONFIRMED)
+  user          User          @relation(fields: [userId], references: [id])
+  charger       Charger       @relation(fields: [chargerId], references: [id])
+  session       Session?
+  createdAt     DateTime      @default(now())
+
+  @@index([chargerId, startAt, endAt])
+}
+
+model Session {
+  id             Int       @id @default(autoincrement())
+  bookingId      Int       @unique
+  startedAt      DateTime
+  endedAt        DateTime?
+  energyKwh      Float     @default(0)
+  costAud        Float     @default(0)
+  booking        Booking   @relation(fields: [bookingId], references: [id])
+  createdAt      DateTime  @default(now())
+}
+
+model Invoice {
+  id            Int          @id @default(autoincrement())
+  userId        Int
+  periodStart   DateTime
+  periodEnd     DateTime
+  totalAud      Float
+  status        InvoiceStatus @default(DRAFT)
+  user          User          @relation(fields: [userId], references: [id])
+  createdAt     DateTime      @default(now())
+}
+
+enum UserRole {
+  ADMIN
+  RESIDENT
+}
+
+enum BookingStatus {
+  CONFIRMED
+  CANCELLED
+  COMPLETED
+}
+
+enum InvoiceStatus {
+  DRAFT
+  SENT
+  PAID
+}

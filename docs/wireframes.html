@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ChargeShare Wireframes</title>
+    <style>
+      :root {
+        --bg: #f4f6f8;
+        --paper: #ffffff;
+        --ink: #1f2937;
+        --line: #9ca3af;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        padding: 24px;
+        background: linear-gradient(160deg, #f3f4f6 0%, #e5e7eb 100%);
+        color: var(--ink);
+        font-family: "Segoe UI", Arial, sans-serif;
+      }
+
+      h1,
+      h2 {
+        margin: 0 0 12px;
+      }
+
+      p {
+        margin: 0 0 16px;
+      }
+
+      .grid {
+        display: grid;
+        gap: 18px;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      }
+
+      .wireframe {
+        background: var(--paper);
+        border: 2px solid var(--line);
+        border-radius: 12px;
+        padding: 14px;
+        min-height: 360px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+      }
+
+      .title {
+        font-size: 16px;
+        font-weight: 700;
+        margin-bottom: 10px;
+      }
+
+      .row {
+        border: 1px dashed var(--line);
+        border-radius: 8px;
+        padding: 8px;
+        margin-bottom: 8px;
+        font-size: 13px;
+      }
+
+      .row.small {
+        min-height: 28px;
+      }
+
+      .row.tall {
+        min-height: 72px;
+      }
+
+      .kpis {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+      }
+
+      .badge {
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        display: inline-block;
+        padding: 3px 8px;
+        font-size: 12px;
+        margin-right: 6px;
+      }
+
+      @media (max-width: 640px) {
+        body {
+          padding: 12px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <h1>ChargeShare Low-Fidelity Wireframes</h1>
+    <p>
+      Phase 1 baseline screens for resident and administrator user journeys.
+    </p>
+
+    <div class="grid">
+      <section class="wireframe">
+        <div class="title">Login</div>
+        <div class="row small">Logo + Tagline</div>
+        <div class="row small">Email Input</div>
+        <div class="row small">Password Input</div>
+        <div class="row small">Primary CTA: Login</div>
+        <div class="row small">Secondary CTA: Register</div>
+      </section>
+
+      <section class="wireframe">
+        <div class="title">Resident Dashboard</div>
+        <div class="row small">Top Navigation</div>
+        <div class="row small">Welcome + Next Booking</div>
+        <div class="row tall">Availability Summary Cards</div>
+        <div class="row tall">Quick Actions</div>
+        <span class="badge">Book Charger</span
+        ><span class="badge">View Sessions</span
+        ><span class="badge">View Invoices</span>
+      </section>
+
+      <section class="wireframe">
+        <div class="title">Booking</div>
+        <div class="row small">Charger Selector</div>
+        <div class="row small">Date + Time Inputs</div>
+        <div class="row tall">Calendar Availability Grid</div>
+        <div class="row small">Estimated Cost</div>
+        <div class="row small">Confirm Booking Button</div>
+      </section>
+
+      <section class="wireframe">
+        <div class="title">My Sessions</div>
+        <div class="row small">Top Navigation</div>
+        <div class="row tall">Sessions Table (Date/Charger/kWh/Cost)</div>
+        <div class="row small">Monthly Total Summary</div>
+      </section>
+
+      <section class="wireframe">
+        <div class="title">My Invoices</div>
+        <div class="row small">Top Navigation</div>
+        <div class="row tall">Invoice Table (Period/Status/Amount)</div>
+        <div class="row small">Download/Preview Action</div>
+        <div class="row small">Email Latest Invoice Action</div>
+      </section>
+
+      <section class="wireframe">
+        <div class="title">Admin Dashboard</div>
+        <div class="row small">Admin Top Navigation</div>
+        <div class="kpis">
+          <div class="row small">Bookings Today</div>
+          <div class="row small">Utilisation %</div>
+          <div class="row small">Monthly Revenue</div>
+        </div>
+        <div class="row tall">Utilisation Chart Area</div>
+        <div class="row tall">Peak Usage Heatmap Area</div>
+        <div class="row small">Alerts and Exceptions</div>
+      </section>
+    </div>
+  </body>
+</html>
