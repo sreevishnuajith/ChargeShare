@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
+  "prisma": {
+    "seed": "node prisma/seed.js"
+  },
   "scripts": {
     "dev": "nodemon src/server.js",
     "start": "node src/server.js",
@@ -11,7 +14,9 @@
     "test:watch": "vitest",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
-    "prisma:studio": "prisma studio"
+    "prisma:seed": "prisma db seed",
+    "prisma:studio": "prisma studio",
+    "db:setup": "prisma generate && prisma migrate dev --name init && prisma db seed && prisma studio"
   },
   "dependencies": {
     "@prisma/client": "^6.2.1",

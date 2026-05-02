@@ -14,7 +14,8 @@
     "lint": "npm run lint --workspace apps/frontend && npm run lint --workspace apps/backend",
     "test": "npm run test --workspace apps/frontend && npm run test --workspace apps/backend",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "db:setup": "npm run db:setup --workspace apps/backend"
   },
   "devDependencies": {
     "concurrently": "^9.1.2",

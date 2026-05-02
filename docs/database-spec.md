@@ -211,24 +211,45 @@ Example sample row concepts:
 
 ## 9. Local Database Setup Workflow
 
-From repository root:
+### First-time setup (new clone or clean machine)
+
+**Step 1 — Copy the environment file (one time only):**
 
 ```bash
 cp apps/backend/.env.example apps/backend/.env
-npm run prisma:generate --workspace apps/backend
-npm run prisma:migrate --workspace apps/backend -- --name init
 ```
 
-If/when seed script is added (recommended next step):
+**Step 2 — Run the single setup script:**
 
 ```bash
-npx prisma db seed --schema apps/backend/prisma/schema.prisma
+npm run db:setup
 ```
 
-Reset local DB (destructive, dev only):
+This one command does everything in sequence:
+
+| Step | What happens |
+|------|-------------|
+| `prisma generate` | Generates the Prisma Client from the schema |
+| `prisma migrate dev --name init` | Creates and applies the SQLite database migration |
+| `prisma db seed` | Inserts baseline data (building, admin, 3 residents, 3 chargers) |
+| `prisma studio` | Opens the database browser at `http://localhost:5555` |
+
+The seed is idempotent — running `db:setup` again will not duplicate data.
+
+### Restarting Prisma Studio only
+
+If the database is already set up and you just want to open the browser:
 
 ```bash
-npx prisma migrate reset --schema apps/backend/prisma/schema.prisma
+npm run prisma:studio --workspace apps/backend
+```
+
+### Resetting the database (destructive, dev only)
+
+Wipes all data and reruns migrations and seed from scratch:
+
+```bash
+cd apps/backend && npx prisma migrate reset
 ```
 
 ## 10. How to Explore Database Tables
