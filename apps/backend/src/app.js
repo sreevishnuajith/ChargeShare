@@ -3,6 +3,7 @@ import express from "express";
 import helmet from "helmet";
 import pinoHttp from "pino-http";
 import logger from "./logger.js";
+import authRouter from "./routes/auth.js";
 
 const app = express();
 
@@ -18,5 +19,7 @@ app.get("/health", (_req, res) => {
     timestamp: new Date().toISOString(),
   });
 });
+
+app.use("/auth", authRouter);
 
 export default app;
