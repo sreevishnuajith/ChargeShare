@@ -213,32 +213,39 @@ Example sample row concepts:
 
 ### First-time setup (new clone or clean machine)
 
-**Step 1 — Copy the environment file (one time only):**
+Three commands from the repository root — no VS Code required:
 
 ```bash
-cp apps/backend/.env.example apps/backend/.env
-```
-
-**Step 2 — Run the single setup script:**
-
-```bash
+git clone https://github.com/sreevishnuajith/ChargeShare.git
+cd ChargeShare
+npm install
 npm run db:setup
 ```
 
-This one command does everything in sequence:
+That is the complete setup. `npm run db:setup` runs the following steps automatically:
 
 | Step | What happens |
 |------|-------------|
+| Auto-copy `.env` | Copies `.env.example` → `.env` if `.env` does not already exist |
 | `prisma generate` | Generates the Prisma Client from the schema |
-| `prisma migrate dev --name init` | Creates and applies the SQLite database migration |
-| `prisma db seed` | Inserts baseline data (building, admin, 3 residents, 3 chargers) |
-| `prisma studio` | Opens the database browser at `http://localhost:5555` |
+| `prisma migrate dev --name init` | Creates the SQLite database file and applies all migrations |
+| `prisma db seed` | Inserts baseline data: 1 building, 1 admin, 3 residents, 3 chargers |
+| `prisma studio` | Opens the table browser at `http://localhost:5555` |
 
-The seed is idempotent — running `db:setup` again will not duplicate data.
+The seed uses `upsert` throughout, so `db:setup` is safe to run multiple times — it will not duplicate data.
+
+Seed account credentials (development only):
+
+| Email | Role | Password |
+|-------|------|----------|
+| admin@chargeshare.local | ADMIN | ChangeMe123! |
+| vishnu@chargeshare.local | RESIDENT | ChangeMe123! |
+| resident2@chargeshare.local | RESIDENT | ChangeMe123! |
+| resident3@chargeshare.local | RESIDENT | ChangeMe123! |
 
 ### Restarting Prisma Studio only
 
-If the database is already set up and you just want to open the browser:
+If the database is already set up and you just want to reopen the browser:
 
 ```bash
 npm run prisma:studio --workspace apps/backend
@@ -246,7 +253,7 @@ npm run prisma:studio --workspace apps/backend
 
 ### Resetting the database (destructive, dev only)
 
-Wipes all data and reruns migrations and seed from scratch:
+Wipes all tables and data, then reruns migrations and seed from scratch:
 
 ```bash
 cd apps/backend && npx prisma migrate reset

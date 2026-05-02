@@ -16,7 +16,7 @@
     "prisma:migrate": "prisma migrate dev",
     "prisma:seed": "prisma db seed",
     "prisma:studio": "prisma studio",
-    "db:setup": "prisma generate && prisma migrate dev --name init && prisma db seed && prisma studio"
+    "db:setup": "node -e \"const{existsSync,copyFileSync}=require('fs');existsSync('.env')||copyFileSync('.env.example','.env')\" && prisma generate && prisma migrate dev --name init && prisma db seed && prisma studio"
   },
   "dependencies": {
     "@prisma/client": "^6.2.1",
