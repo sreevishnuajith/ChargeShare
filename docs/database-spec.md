@@ -342,3 +342,170 @@ Recommended deployment order:
 2. add npm script for seeding (`prisma:seed`)
 3. implement booking overlap query and transaction-safe booking creation
 4. add unit/integration tests for seed and booking constraints
+
+## 14. Practical Guide: Exploring Data with Free Tools
+
+Three free tools can be used to inspect, query, and verify ChargeShare data at any point during development. Each is described below with step-by-step instructions.
+
+---
+
+### Tool 1 — Prisma Studio (Browser-based table viewer)
+
+**What it is:** A visual table browser built into Prisma. Runs in a browser tab and shows every model as a spreadsheet-style grid. No installation beyond what is already in the project.
+
+**How to start it:**
+
+```bash
+# From the repository root
+npm run prisma:studio --workspace apps/backend
+```
+
+Prisma Studio opens automatically at `http://localhost:5555`.
+
+**What you can do:**
+
+| Action | How |
+|--------|-----|
+| Browse all tables | Click any model name in the left sidebar (Building, User, Charger, Booking, Session, Invoice) |
+| Filter rows | Use the **Add filter** button above the grid to filter by any field (e.g. `role = ADMIN`) |
+| Add a test row | Click **+ Add record** and fill in the fields directly in the browser |
+| Edit a value | Click any cell to edit it inline and press **Save 1 change** |
+| Delete a row | Hover a row and click the trash icon on the left, then confirm |
+| Follow relationships | Click the linked record count in a relation column (e.g. `3 Bookings`) to jump to those rows |
+
+**When to use it:** Best for visually verifying seed data, checking that a booking was created correctly, or quickly editing a test value without restarting the server.
+
+---
+
+### Tool 2 — DB Browser for SQLite (Free desktop GUI)
+
+**What it is:** A free, open-source desktop application for browsing and querying SQLite database files directly. Available for macOS, Windows, and Linux.
+
+**Download:** [sqlitebrowser.org](https://sqlitebrowser.org) — click **Download** and choose the installer for your operating system. No account required.
+
+**How to open the ChargeShare database:**
+
+1. Open DB Browser for SQLite.
+2. Click **Open Database** (top-left toolbar).
+3. Navigate to `apps/backend/prisma/dev.db` inside the project folder and click **Open**.
+4. The left panel shows all tables under the **Database Structure** tab.
+
+**Key tabs:**
+
+| Tab | Purpose |
+|-----|---------|
+| Database Structure | Lists all tables, columns, indexes, and their types |
+| Browse Data | Spreadsheet view of any table; use the **Table** dropdown to switch |
+| Execute SQL | Type and run any SQL query against the database |
+
+**Useful SQL queries to run in Execute SQL:**
+
+```sql
+-- List all users with their role
+SELECT id, fullName, email, role FROM User ORDER BY role;
+
+-- List all chargers
+SELECT id, label, location, powerKw, isActive FROM Charger;
+
+-- Show bookings with user email and charger label
+SELECT
+  b.id,
+  u.email AS resident,
+  c.label AS charger,
+  b.startAt,
+  b.endAt,
+  b.status
+FROM Booking b
+JOIN User u ON b.userId = u.id
+JOIN Charger c ON b.chargerId = c.id
+ORDER BY b.startAt;
+
+-- Show sessions with calculated cost
+SELECT
+  s.id,
+  s.bookingId,
+  s.energyKwh,
+  s.costAud,
+  s.startedAt,
+  s.endedAt
+FROM Session s
+ORDER BY s.startedAt DESC;
+
+-- Show invoices per user
+SELECT
+  i.id,
+  u.email,
+  i.periodStart,
+  i.periodEnd,
+  i.totalAud,
+  i.status
+FROM Invoice i
+JOIN User u ON i.userId = u.id
+ORDER BY i.periodStart DESC;
+```
+
+**Important:** DB Browser opens the `.db` file directly. If the backend server is also running at the same time, close DB Browser or use **File → Close Database** before running `prisma migrate reset` to avoid file-lock errors.
+
+**When to use it:** Best for running custom SQL joins, verifying data integrity across multiple tables, and taking screenshots for project documentation.
+
+---
+
+### Tool 3 — SQLite CLI (Built-in command-line tool)
+
+**What it is:** The `sqlite3` command-line tool that ships with macOS and most Linux distributions. No installation needed on macOS.
+
+**Check it is available:**
+
+```bash
+sqlite3 --version
+```
+
+**Open the database:**
+
+```bash
+sqlite3 apps/backend/prisma/dev.db
+```
+
+The prompt changes to `sqlite>`. Type `.quit` to exit.
+
+**Useful dot commands:**
+
+```
+.tables              -- list all table names
+.schema User         -- show the CREATE TABLE statement for User
+.schema Booking      -- show the Booking table definition including indexes
+.headers on          -- show column names in query output
+.mode column         -- align output into readable columns
+.quit                -- exit the CLI
+```
+
+**Quick inspection commands (run from the project root without entering the REPL):**
+
+```bash
+# List all tables
+sqlite3 apps/backend/prisma/dev.db ".tables"
+
+# Count rows in each table
+sqlite3 apps/backend/prisma/dev.db "SELECT 'User' AS tbl, COUNT(*) FROM User UNION ALL SELECT 'Charger', COUNT(*) FROM Charger UNION ALL SELECT 'Booking', COUNT(*) FROM Booking UNION ALL SELECT 'Session', COUNT(*) FROM Session UNION ALL SELECT 'Invoice', COUNT(*) FROM Invoice;"
+
+# Check all users
+sqlite3 apps/backend/prisma/dev.db "SELECT id, fullName, email, role FROM User;"
+
+# Check for overlapping bookings on a charger
+sqlite3 apps/backend/prisma/dev.db "SELECT id, chargerId, startAt, endAt, status FROM Booking WHERE chargerId = 1 ORDER BY startAt;"
+```
+
+**When to use it:** Best for quick one-line checks during development — for example, verifying a seed ran correctly or confirming a booking was written to the database after an API call.
+
+---
+
+### Choosing the Right Tool
+
+| Situation | Recommended Tool |
+|-----------|-----------------|
+| Quickly check seed data loaded correctly | Prisma Studio or SQLite CLI |
+| Browse all rows in a table visually | Prisma Studio or DB Browser |
+| Run a JOIN across multiple tables | DB Browser (Execute SQL tab) |
+| Screenshot tables for project documentation | DB Browser (Browse Data tab) |
+| Verify row counts from the terminal | SQLite CLI |
+| Edit a test value without restarting the server | Prisma Studio |
