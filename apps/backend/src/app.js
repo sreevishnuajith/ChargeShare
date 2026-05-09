@@ -6,6 +6,7 @@ import logger from "./logger.js";
 import authRouter from "./routes/auth.js";
 import chargersRouter from "./routes/chargers.js";
 import bookingsRouter from "./routes/bookings.js";
+import sessionsRouter from "./routes/sessions.js";
 
 const app = express();
 
@@ -25,5 +26,6 @@ app.get("/health", (_req, res) => {
 app.use("/auth", authRouter);
 app.use("/chargers", chargersRouter);
 app.use("/bookings", bookingsRouter);
+app.use("/sessions", sessionsRouter);
 
 export default app;

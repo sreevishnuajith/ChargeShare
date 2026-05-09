@@ -281,8 +281,8 @@ As Expected. Screenshots will be consolidated in a separate document where appli
 
 | | |
 |---|---|
-| **Status** | Pending |
-| **Date tested** | — |
+| **Status** | ✅ Pass |
+| **Date tested** | 9 May 2026 |
 
 **Steps:**
 1. Log in using `vishnu@chargeshare.local` and `ChangeMe123!`
@@ -293,7 +293,7 @@ As Expected. Screenshots will be consolidated in a separate document where appli
 A list of chargers is displayed. Each charger shows its label (e.g. A1), location (e.g. Basement B1), and power rating (e.g. 7.2 kW). Charger A1 shows a booked slot for tomorrow 08:00–10:00 (seeded for Vishnu). Chargers A2 and B1 show no upcoming bookings. A **Book** button is visible on each charger card.
 
 **Actual Result:**  
-*[Screenshot to be supplied]*
+As Expected. Screenshots will be consolidated in a separate document where applicable.
 
 ---
 
@@ -301,8 +301,8 @@ A list of chargers is displayed. Each charger shows its label (e.g. A1), locatio
 
 | | |
 |---|---|
-| **Status** | Pending |
-| **Date tested** | — |
+| **Status** | ✅ Pass |
+| **Date tested** | 9 May 2026 |
 
 **Steps:**
 1. Log in using `vishnu@chargeshare.local` and `ChangeMe123!`
@@ -316,7 +316,7 @@ A list of chargers is displayed. Each charger shows its label (e.g. A1), locatio
 The booking is accepted. The user is redirected to the My Bookings page. The new booking for Charger B1 appears in the list with status **CONFIRMED** and the selected start and end times displayed.
 
 **Actual Result:**  
-*[Screenshot to be supplied]*
+As Expected. Screenshots will be consolidated in a separate document where applicable.
 
 ---
 
@@ -324,8 +324,8 @@ The booking is accepted. The user is redirected to the My Bookings page. The new
 
 | | |
 |---|---|
-| **Status** | Pending |
-| **Date tested** | — |
+| **Status** | ✅ Pass |
+| **Date tested** | 9 May 2026 |
 
 **Steps:**
 1. Log in using `vishnu@chargeshare.local` and `ChangeMe123!`
@@ -339,7 +339,7 @@ The booking is accepted. The user is redirected to the My Bookings page. The new
 The booking is rejected. An error message is displayed stating that the charger is already booked for the selected time slot. The user remains on the booking form and no new booking is created.
 
 **Actual Result:**  
-*[Screenshot to be supplied]*
+As Expected. Screenshots will be consolidated in a separate document where applicable.
 
 ---
 
@@ -347,8 +347,8 @@ The booking is rejected. An error message is displayed stating that the charger 
 
 | | |
 |---|---|
-| **Status** | Pending |
-| **Date tested** | — |
+| **Status** | ✅ Pass |
+| **Date tested** | 9 May 2026 |
 
 **Steps:**
 1. Log in using `vishnu@chargeshare.local` and `ChangeMe123!`
@@ -360,13 +360,55 @@ The booking is rejected. An error message is displayed stating that the charger 
 The booking status changes to **CANCELLED**. The Cancel link disappears from that booking entry. The booking remains visible in the list with the red CANCELLED badge.
 
 **Actual Result:**  
-*[Screenshot to be supplied]*
+As Expected. Screenshots will be consolidated in a separate document where applicable.
 
 ---
 
 ### Module: Charging Session Simulation
 
-> *(To be completed — Task 6)*
+**Testing method:** Functional Testing and Live Data Testing
+
+---
+
+#### SIM-01 — View charging session history for a completed session
+
+| | |
+|---|---|
+| **Status** | ✅ Pass |
+| **Date tested** | 9 May 2026 |
+
+**Steps:**
+1. Log in using `resident2@chargeshare.local` and `ChangeMe123!`
+2. On the Resident Dashboard, click the **Charging Sessions** card
+3. The Sessions page loads at `http://localhost:5173/sessions`
+
+**Expected Result:**  
+One completed session is displayed for Charger A2. The session shows yesterday's date, 14.40 kWh of energy used, and a cost of $8.64. A green **Completed** badge appears on the session card.
+
+**Actual Result:**  
+As Expected. Screenshots will be consolidated in a separate document where applicable.
+
+---
+
+#### SIM-02 — Verify the scheduler automatically starts and finalises a session
+
+| | |
+|---|---|
+| **Status** | ✅ Pass |
+| **Date tested** | 9 May 2026 |
+
+**Steps:**
+1. Ensure the backend is running (`npm run dev` from the project root)
+2. Open Prisma Studio (`npm run prisma:studio --workspace apps/backend`) and navigate to the **Session** table
+3. Create a test booking in the **Booking** table with a start time 1 minute in the future and end time 3 minutes in the future, status **CONFIRMED**
+4. Wait 1–2 minutes, then refresh the Session table in Prisma Studio
+5. Wait until the end time has passed, then refresh again
+
+**Expected Result:**  
+After the start time passes, a new Session row appears with `startedAt` matching the booking's start time and `energyKwh` increasing over time. After the end time passes, `endedAt` is set, `energyKwh` and `costAud` are finalised (calculated as power kW × duration h × $0.60/kWh), and the booking status changes to **COMPLETED**.
+
+**Actual Result:**  
+As Expected. Screenshots will be consolidated in a separate document where applicable.
 
 ---
 
@@ -436,9 +478,9 @@ Volume testing will be conducted near the end of the project to verify the syste
 |--------|------------|---------|---------|---------|
 | Health Check | 1 | 1 | 0 | 0 |
 | Authentication | 9 | 9 | 0 | 0 |
-| Charger Discovery and Booking | 4 | 0 | 0 | 4 |
-| Charging Session Simulation | — | — | — | Not built |
+| Charger Discovery and Booking | 4 | 4 | 0 | 0 |
+| Charging Session Simulation | 2 | 2 | 0 | 0 |
 | Billing and Invoicing | — | — | — | Not built |
 | Admin Dashboard | — | — | — | Not built |
 | Email Notifications | — | — | — | Not built |
-| **Total** | **14** | **10** | **0** | **4** |
+| **Total** | **16** | **16** | **0** | — |

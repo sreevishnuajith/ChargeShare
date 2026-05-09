@@ -16,6 +16,7 @@ export default function Navbar() {
         <Link to="/dashboard" className="text-xl font-bold text-brand-dark">ChargeShare</Link>
         <Link to="/chargers" className="text-sm text-slate-600 hover:text-brand transition-colors">Chargers</Link>
         <Link to="/bookings" className="text-sm text-slate-600 hover:text-brand transition-colors">My Bookings</Link>
+        <Link to="/sessions" className="text-sm text-slate-600 hover:text-brand transition-colors">Sessions</Link>
       </div>
       <div className="flex items-center gap-4">
         <span className="text-sm text-slate-700">

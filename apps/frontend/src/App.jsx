@@ -7,6 +7,7 @@ import DashboardPage from "./pages/DashboardPage";
 import ChargersPage from "./pages/ChargersPage";
 import BookChargerPage from "./pages/BookChargerPage";
 import MyBookingsPage from "./pages/MyBookingsPage";
+import SessionsPage from "./pages/SessionsPage";
 
 export default function App() {
   return (
@@ -44,6 +45,14 @@ export default function App() {
             element={
               <ProtectedRoute>
                 <MyBookingsPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/sessions"
+            element={
+              <ProtectedRoute>
+                <SessionsPage />
               </ProtectedRoute>
             }
           />

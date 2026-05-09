@@ -5,7 +5,7 @@ import Navbar from "../components/Navbar";
 const FEATURE_CARDS = [
   { title: "Available Chargers", desc: "Browse and book EV charging slots", path: "/chargers", ready: true },
   { title: "My Bookings", desc: "View and manage your upcoming bookings", path: "/bookings", ready: true },
-  { title: "Charging Sessions", desc: "Track your energy usage history", path: null, ready: false },
+  { title: "Charging Sessions", desc: "Track your energy usage history", path: "/sessions", ready: true },
   { title: "My Invoices", desc: "View your monthly billing statements", path: null, ready: false },
 ];
 
