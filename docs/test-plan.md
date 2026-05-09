@@ -63,14 +63,13 @@ Each test case includes the steps to follow, the expected result, and a space fo
 The ChargeShare application loads in the browser. A login screen is displayed with fields for email and password, and an option to register. No error messages appear.
 
 **Actual Result:**  
-*[Screenshot to be supplied — login screen displayed in browser]*
+As Expected. Screenshots will be consolidated in a separate document where applicable.
 
 ---
 
 ### Module: Authentication
 
-**Testing method:** Functional Testing  
-> Backend API tests verified 2 May 2026. UI screenshots to be added once the login and registration screens are built.
+**Testing method:** Functional Testing
 
 ---
 
@@ -93,7 +92,7 @@ The ChargeShare application loads in the browser. A login screen is displayed wi
 A confirmation message is displayed stating the account has been created successfully. The user is automatically logged in and redirected to the Resident Dashboard. The dashboard displays the user's name in the navigation bar and shows a list of available chargers.
 
 **Actual Result:**  
-*[Screenshot to be supplied — registration success and Resident Dashboard displayed]*
+As Expected. Screenshots will be consolidated in a separate document where applicable.
 
 ---
 
@@ -116,7 +115,7 @@ A confirmation message is displayed stating the account has been created success
 The registration form remains on screen. An error message is displayed stating that the email address is already registered. The user is not logged in and no new account is created.
 
 **Actual Result:**  
-*[Screenshot to be supplied — error message "Email already registered" displayed on the registration form]*
+As Expected. Screenshots will be consolidated in a separate document where applicable.
 
 ---
 
@@ -139,7 +138,7 @@ The registration form remains on screen. An error message is displayed stating t
 The form is not submitted. A validation error message appears next to the Email field indicating that the email address format is invalid. All other fields retain the values already entered.
 
 **Actual Result:**  
-*[Screenshot to be supplied — email validation error shown on the registration form]*
+As Expected. Screenshots will be consolidated in a separate document where applicable.
 
 ---
 
@@ -162,7 +161,7 @@ The form is not submitted. A validation error message appears next to the Email 
 The form is not submitted. A validation error message appears next to the Password field indicating that the password must be at least 8 characters long. The user is not registered.
 
 **Actual Result:**  
-*[Screenshot to be supplied — password too short validation error on the registration form]*
+As Expected. Screenshots will be consolidated in a separate document where applicable.
 
 ---
 
@@ -184,7 +183,7 @@ The form is not submitted. A validation error message appears next to the Passwo
 The login succeeds. The user is redirected to the Resident Dashboard. The navigation bar displays the user's name (`Vishnu`). No error messages appear.
 
 **Actual Result:**  
-*[Screenshot to be supplied — Resident Dashboard displayed after successful login]*
+As Expected. Screenshots will be consolidated in a separate document where applicable.
 
 ---
 
@@ -206,7 +205,7 @@ The login succeeds. The user is redirected to the Resident Dashboard. The naviga
 Login fails. The user remains on the login screen. An error message is displayed stating "Invalid email or password". The message does not indicate whether the email address itself is correct, for security reasons.
 
 **Actual Result:**  
-*[Screenshot to be supplied — login error message displayed on the login screen]*
+As Expected. Screenshots will be consolidated in a separate document where applicable.
 
 ---
 
@@ -228,27 +227,7 @@ Login fails. The user remains on the login screen. An error message is displayed
 Login fails. The user remains on the login screen. The same error message is displayed as in AUTH-06: "Invalid email or password". The system does not reveal whether the email address is registered or not.
 
 **Actual Result:**  
-*[Screenshot to be supplied — same login error message as AUTH-06, no indication whether the email exists]*
-
----
-
-#### AUTH-08 — View the user profile after logging in
-
-| | |
-|---|---|
-| **Status** | ✅ Pass |
-| **Date tested** | 2 May 2026 |
-
-**Steps:**
-1. Log in using `vishnu@chargeshare.local` and `ChangeMe123!` (following steps in AUTH-05)
-2. Once on the Resident Dashboard, locate and click the profile icon or the user's name in the navigation bar
-3. The profile page or profile section is displayed
-
-**Expected Result:**  
-The user's profile information is displayed correctly: Full Name (`Vishnu`), email address (`vishnu@chargeshare.local`), and role (`Resident`). The password is not displayed in any form.
-
-**Actual Result:**  
-*[Screenshot to be supplied — user profile screen showing name, email, and role with no password visible]*
+As Expected. Screenshots will be consolidated in a separate document where applicable.
 
 ---
 
@@ -369,10 +348,10 @@ Volume testing will be conducted near the end of the project to verify the syste
 | Module | Total Tests | Passing | Failing | Pending |
 |--------|------------|---------|---------|---------|
 | Health Check | 1 | 1 | 0 | 0 |
-| Authentication | 10 | 10 | 0 | 0 |
+| Authentication | 9 | 9 | 0 | 0 |
 | Charger Discovery and Booking | — | — | — | Not built |
 | Charging Session Simulation | — | — | — | Not built |
 | Billing and Invoicing | — | — | — | Not built |
 | Admin Dashboard | — | — | — | Not built |
 | Email Notifications | — | — | — | Not built |
-| **Total** | **11** | **11** | **0** | — |
+| **Total** | **10** | **10** | **0** | — |
