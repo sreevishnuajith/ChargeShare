@@ -231,7 +231,7 @@ As Expected. Screenshots will be consolidated in a separate document where appli
 
 ---
 
-#### AUTH-09 — Attempt to access the Resident Dashboard without logging in
+#### AUTH-08 — Attempt to access the Resident Dashboard without logging in
 
 | | |
 |---|---|
@@ -246,11 +246,11 @@ As Expected. Screenshots will be consolidated in a separate document where appli
 The system does not display the Resident Dashboard. Instead, the user is automatically redirected to the login screen at `http://localhost:5173`. A message may appear indicating that login is required to access that page.
 
 **Actual Result:**  
-*[Screenshot to be supplied — login screen shown when attempting to access the dashboard directly]*
+As Expected. Screenshots will be consolidated in a separate document where applicable.
 
 ---
 
-#### AUTH-10 — Verify the session ends after logging out
+#### AUTH-09 — Verify the session ends after logging out
 
 | | |
 |---|---|
@@ -267,13 +267,100 @@ The system does not display the Resident Dashboard. Instead, the user is automat
 After logging out, the user is returned to the login screen. Attempting to navigate to the dashboard directly redirects back to the login screen again. The previous session is no longer active and the user cannot access any protected pages without logging in again.
 
 **Actual Result:**  
-*[Screenshot to be supplied — login screen shown after logout, confirming session has ended]*
+As Expected. Screenshots will be consolidated in a separate document where applicable.
 
 ---
 
 ### Module: Charger Discovery and Booking
 
-> *(To be completed — Task 5)*
+**Testing method:** Functional Testing
+
+---
+
+#### BOOK-01 — View the list of available chargers after logging in
+
+| | |
+|---|---|
+| **Status** | Pending |
+| **Date tested** | — |
+
+**Steps:**
+1. Log in using `vishnu@chargeshare.local` and `ChangeMe123!`
+2. On the Resident Dashboard, click the **Available Chargers** card
+3. The Chargers page loads at `http://localhost:5173/chargers`
+
+**Expected Result:**  
+A list of chargers is displayed. Each charger shows its label (e.g. A1), location (e.g. Basement B1), and power rating (e.g. 7.2 kW). Charger A1 shows a booked slot for tomorrow 08:00–10:00 (seeded for Vishnu). Chargers A2 and B1 show no upcoming bookings. A **Book** button is visible on each charger card.
+
+**Actual Result:**  
+*[Screenshot to be supplied]*
+
+---
+
+#### BOOK-02 — Successfully book an available charger for a future time slot
+
+| | |
+|---|---|
+| **Status** | Pending |
+| **Date tested** | — |
+
+**Steps:**
+1. Log in using `vishnu@chargeshare.local` and `ChangeMe123!`
+2. Navigate to the Chargers page
+3. Click **Book** on Charger B1
+4. Set **Start Time** to any future date and time (e.g. two days from today at 2:00 PM)
+5. Set **End Time** to the same date at 4:00 PM
+6. Click **Confirm Booking**
+
+**Expected Result:**  
+The booking is accepted. The user is redirected to the My Bookings page. The new booking for Charger B1 appears in the list with status **CONFIRMED** and the selected start and end times displayed.
+
+**Actual Result:**  
+*[Screenshot to be supplied]*
+
+---
+
+#### BOOK-03 — Attempt to book a charger for a time slot that is already taken
+
+| | |
+|---|---|
+| **Status** | Pending |
+| **Date tested** | — |
+
+**Steps:**
+1. Log in using `vishnu@chargeshare.local` and `ChangeMe123!`
+2. Navigate to the Chargers page
+3. Click **Book** on Charger A1 (which already has a seed booking for tomorrow 08:00–10:00)
+4. Set **Start Time** to tomorrow at 08:00
+5. Set **End Time** to tomorrow at 10:00
+6. Click **Confirm Booking**
+
+**Expected Result:**  
+The booking is rejected. An error message is displayed stating that the charger is already booked for the selected time slot. The user remains on the booking form and no new booking is created.
+
+**Actual Result:**  
+*[Screenshot to be supplied]*
+
+---
+
+#### BOOK-04 — Cancel an upcoming confirmed booking
+
+| | |
+|---|---|
+| **Status** | Pending |
+| **Date tested** | — |
+
+**Steps:**
+1. Log in using `vishnu@chargeshare.local` and `ChangeMe123!`
+2. Navigate to the My Bookings page at `http://localhost:5173/bookings`
+3. Locate the confirmed booking for Charger A1 (tomorrow 08:00–10:00)
+4. Click the **Cancel** link below the booking status badge
+
+**Expected Result:**  
+The booking status changes to **CANCELLED**. The Cancel link disappears from that booking entry. The booking remains visible in the list with the red CANCELLED badge.
+
+**Actual Result:**  
+*[Screenshot to be supplied]*
 
 ---
 
@@ -349,9 +436,9 @@ Volume testing will be conducted near the end of the project to verify the syste
 |--------|------------|---------|---------|---------|
 | Health Check | 1 | 1 | 0 | 0 |
 | Authentication | 9 | 9 | 0 | 0 |
-| Charger Discovery and Booking | — | — | — | Not built |
+| Charger Discovery and Booking | 4 | 0 | 0 | 4 |
 | Charging Session Simulation | — | — | — | Not built |
 | Billing and Invoicing | — | — | — | Not built |
 | Admin Dashboard | — | — | — | Not built |
 | Email Notifications | — | — | — | Not built |
-| **Total** | **10** | **10** | **0** | — |
+| **Total** | **14** | **10** | **0** | **4** |

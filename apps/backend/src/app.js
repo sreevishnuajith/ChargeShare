@@ -4,6 +4,8 @@ import helmet from "helmet";
 import pinoHttp from "pino-http";
 import logger from "./logger.js";
 import authRouter from "./routes/auth.js";
+import chargersRouter from "./routes/chargers.js";
+import bookingsRouter from "./routes/bookings.js";
 
 const app = express();
 
@@ -21,5 +23,7 @@ app.get("/health", (_req, res) => {
 });
 
 app.use("/auth", authRouter);
+app.use("/chargers", chargersRouter);
+app.use("/bookings", bookingsRouter);
 
 export default app;

@@ -4,6 +4,9 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import DashboardPage from "./pages/DashboardPage";
+import ChargersPage from "./pages/ChargersPage";
+import BookChargerPage from "./pages/BookChargerPage";
+import MyBookingsPage from "./pages/MyBookingsPage";
 
 export default function App() {
   return (
@@ -17,6 +20,30 @@ export default function App() {
             element={
               <ProtectedRoute>
                 <DashboardPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/chargers"
+            element={
+              <ProtectedRoute>
+                <ChargersPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/chargers/:id/book"
+            element={
+              <ProtectedRoute>
+                <BookChargerPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/bookings"
+            element={
+              <ProtectedRoute>
+                <MyBookingsPage />
               </ProtectedRoute>
             }
           />

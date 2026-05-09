@@ -2,6 +2,14 @@ import axios from "axios";
 
 const api = axios.create({ baseURL: "http://localhost:4000" });
 
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem("cs_token");
+  if (token) config.headers.Authorization = `Bearer ${token}`;
+  return config;
+});
+
+export default api;
+
 export async function registerUser(fullName, email, password) {
   const { data } = await api.post("/auth/register", {
     fullName,
