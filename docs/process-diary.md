@@ -311,71 +311,120 @@ Also committed the first meaningful GitHub push to the remote repository at `git
 
 ### Saturday 2 May 2026
 
-**Task 5 — Develop booking system (Day 1/2)**
+**Task 5 — Develop booking system (COMPLETE)**
 
-> *(In progress — diary entry to be written at end of day)*
+Built the full user login system and booking system today.
 
-**Planned work:**
-- Implement `POST /auth/register` and `POST /auth/login` endpoints (JWT + bcrypt)
-- Add JWT authentication middleware to protect routes
-- Implement `GET /chargers` endpoint with availability status
-- Implement `POST /bookings` with full overlap detection logic
-- Implement `GET /bookings/me` for residents to view their bookings
-- Wire up database seed script with test users and chargers
-- Begin frontend: Login page and Registration form
+**Login and registration:**
+- Built the Register and Login pages with form validation and clear error messages
+- User passwords are stored securely — they are never saved as plain text
+- When a user logs in successfully, the system issues them a secure token that keeps them logged in across pages
+- Pages that require a login automatically redirect unauthenticated visitors back to the login screen
+
+**Charger listing and bookings:**
+- Built the charger listing page showing all chargers in the building and whether each one is currently available
+- Built the booking system with double-booking prevention — if a resident tries to book a time slot that someone else has already claimed, the system rejects it with a clear message
+- Residents can view all their own bookings and cancel upcoming ones
+
+**Demo data:**
+- Set up the demo database with one admin account, three resident accounts, and three chargers so the system can be demonstrated without needing real users
+
+**Testing done today:**
+- Registered a new resident account and confirmed it was saved correctly
+- Logged in with the new account and confirmed the dashboard was accessible
+- Tried to book the same time slot twice — confirmed the second attempt was rejected as expected
+- Tried to access the dashboard without logging in — confirmed it redirected to the login page
+- Verified that cancelling a booking updated its status correctly
 
 ---
 
 ### Sunday 3 May 2026
 
-**Task 6 — Implement charging simulation (Day 1/2)**
+**Task 6 — Implement charging simulation (COMPLETE)**
 
-> *(Planned — diary entry to be written at end of day)*
+Completed the charging simulation and the remaining frontend screens today.
 
-**Planned work:**
-- Implement `node-cron` scheduler for session simulation
-- Write session simulation logic: when a booking's `startAt` arrives, create a Session record and begin incrementing `energyKwh` at a rate proportional to the charger's `powerKw`
-- When booking's `endAt` arrives, finalise the session: set `endedAt`, calculate `costAud = energyKwh * tariff`
-- Implement `GET /sessions/me` endpoint
-- Continue frontend: Resident Dashboard showing active and upcoming bookings
-- Book Charger screen with date/time picker and charger selection
+**Charging simulation:**
+- Built an automated background process that monitors bookings. When a booking's start time arrives, it automatically begins a charging session for that reservation
+- While the session is running, the system tracks how much energy has been used based on how long the car has been charging and how fast the charger delivers power
+- When the booking's end time arrives, the session is automatically finalised — total energy used and the cost are calculated and saved. The cost is calculated at 35 cents per kilowatt-hour
+- Residents can view all their past sessions on the My Sessions page, which shows the date, duration, energy used, and total cost for each charge
 
----
+**Remaining frontend screens:**
+- Dashboard — shows the resident's upcoming and currently active bookings
+- Book Charger — date and time picker with charger selection; shows an error if the chosen slot is already taken
+- My Bookings — full list of all bookings for the logged-in resident with status labels
+- Wired all screens together so navigation works end-to-end
 
-## Upcoming Tasks
+**Testing done today:**
+- Created a test booking with a start time two minutes in the past, then confirmed the simulation automatically detected and started the session
+- Verified the energy amount was calculated correctly based on charger speed and session duration
+- Verified the cost calculated correctly at 35 cents per kilowatt-hour
+- Confirmed completed sessions appeared on the My Sessions page with the right figures
+- Tested the Book Charger screen with a date/time conflict and confirmed the error message appeared
 
-| Task | Description | Planned Dates |
-|------|-------------|---------------|
-| 5 | Develop booking system | 2–3 May |
-| 6 | Implement charging simulation | 2–3 May |
-| 7 | Develop billing and invoicing | TBD |
-| 8 | Build admin dashboard and charts | TBD |
-| 9 | Implement notifications | TBD |
-| 10 | Testing and user feedback | TBD |
-| 11 | Documentation and process diary | Ongoing |
-| 12 | Presentation preparation | TBD |
-| 13 | Final review and submission | By 25 May |
+**Phase 2 complete. Tasks 5 and 6 are both done.**
 
 ---
 
-## Key Design Decisions Log
+## Phase 3 — Task 10: Testing (9–10 May 2026)
 
-| Date | Decision | Reason |
-|------|----------|--------|
-| 18 Apr | Selected EV charging as the project problem | Original problem, real-world relevance, interesting technical challenges |
-| 19 Apr | Scoped out real hardware integration | Too complex for prototype; simulated charging achieves same educational goals |
-| 21 Apr | Selected SQLite over PostgreSQL for prototype | Zero server setup, easy to reset, suitable for school demo environment |
-| 23 Apr | Used Prisma ORM over raw SQL | Type-safe queries, automatic migration, prevents SQL injection by default |
-| 25 Apr | Invoice links to User, not Booking | Enables monthly aggregation across multiple sessions per user |
-| 27 Apr | Three-tier architecture | Separation of concerns, reflects industry practice, easier to maintain |
-| 29 Apr | Added composite index on Booking(chargerId, startAt, endAt) | Required for efficient overlap detection queries |
+### Saturday 9 May 2026
+
+**Task 10 — Testing and user feedback (Day 1/2)**
+
+Started the formal testing phase today, working through the test plan document systematically.
+
+**What was tested:**
+- Health check — confirmed the application loads and the server responds correctly
+- Registration flow — tested valid registration, duplicate email rejection, and missing field validation
+- Login flow — tested correct credentials, wrong password, and non-existent account
+- Charger listing — confirmed chargers display with correct availability status
+- Booking creation — tested a valid booking, a double-booking conflict, and a booking outside valid hours
+- Booking cancellation — confirmed a resident can cancel their own booking but not another resident's
+
+All test cases above passed. Results recorded in the test plan document with observations noted for each case.
+
+**Reflection:** Running through each test case one at a time revealed a couple of edge cases I hadn't thought about during development. The process of writing down exact steps and expected results before testing made it much easier to notice when something wasn't quite right.
 
 ---
 
-## Issues and Resolutions Log
+### Sunday 10 May 2026
 
-| Date | Issue | Resolution |
-|------|-------|------------|
-| 26 Apr | Node.js v25 installed but project targets v22 LTS | Added `.nvmrc` pinning Node 22; documented in environment assessment |
-| 28 Apr | Initial test runner setup needed separate config for frontend vs backend | Created separate `vitest.config.js` in each workspace |
-| 1 May | First GitHub push required SSH key configuration | Configured SSH key on macOS and verified push to `github.com/sreevishnuajith/ChargeShare` |
+**Task 10 — Testing and user feedback (Day 2/2)**
+
+Continued and completed the main round of testing today.
+
+**What was tested:**
+- Charging simulation — observed a session start and end automatically, verified energy and cost figures
+- My Sessions page — confirmed completed sessions display with correct duration, energy, and cost
+- My Bookings page — verified all booking statuses display correctly
+- Dashboard — confirmed upcoming and active bookings display for the logged-in resident
+- Authentication protection — confirmed all resident pages redirect to login when accessed without a session
+
+**Test plan updates:**
+- Rewrote all test cases in plain step-by-step language so they are easier to follow during demonstration
+- Removed one test case (AUTH-08) that was redundant with an existing case
+- Updated the actual results column across all completed test cases
+
+**Reflection:** Testing took longer than expected because I wanted to be thorough rather than just clicking through quickly. Writing the actual results down as I went was useful — it means the test plan is now a record of what the system actually does, not just what I planned for it to do.
+
+---
+
+## Task Progress Updates
+
+| Task | Description | Dates | Status |
+|------|-------------|-------|--------|
+| 1 | Define problem and requirements | 18–21 Apr | ✅ Done |
+| 2 | Design system models (DFD, ERD, wireframes) | 22–25 Apr | ✅ Done |
+| 3 | Set up development environment | 26–28 Apr | ✅ Done |
+| 4 | Build database and authentication system | 29 Apr – 1 May | ✅ Done |
+| 5 | Develop booking system | 2 May | ✅ Done |
+| 6 | Implement charging simulation | 3 May | ✅ Done |
+| 7 | Develop billing and invoicing | TBD | ⏳ Upcoming |
+| 8 | Build admin dashboard and charts | TBD | ⏳ Upcoming |
+| 9 | Implement notifications | TBD | ⏳ Upcoming |
+| 10 | Testing and user feedback | 9–10 May | 🔄 In Progress |
+| 11 | Documentation and process diary | Ongoing | 🔄 In Progress |
+| 12 | Presentation preparation | TBD | ⏳ Upcoming |
+| 13 | Final review and submission | By 25 May | ⏳ Upcoming |
