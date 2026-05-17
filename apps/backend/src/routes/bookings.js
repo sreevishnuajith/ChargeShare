@@ -2,6 +2,7 @@ import express from "express";
 import { z } from "zod";
 import prisma from "../db.js";
 import { authenticate } from "../middleware/authenticate.js";
+import { sendBookingConfirmation } from "../mailer.js";
 
 const router = express.Router();
 
@@ -64,6 +65,10 @@ router.post("/", authenticate, async (req, res) => {
       charger: { select: { label: true, location: true, powerKw: true } },
     },
   });
+
+  // Send confirmation email (non-blocking)
+  const user = await prisma.user.findUnique({ where: { id: req.user.sub }, select: { fullName: true, email: true } });
+  sendBookingConfirmation(user, booking, booking.charger);
 
   res.status(201).json(booking);
 });

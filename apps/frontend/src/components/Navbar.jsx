@@ -10,13 +10,22 @@ export default function Navbar() {
     navigate("/login");
   }
 
+  const isAdmin = user?.role === "ADMIN";
+
   return (
     <nav className="bg-white border-b border-teal-100 shadow-sm px-6 py-3 flex items-center justify-between">
       <div className="flex items-center gap-6">
         <Link to="/dashboard" className="text-xl font-bold text-brand-dark">ChargeShare</Link>
-        <Link to="/chargers" className="text-sm text-slate-600 hover:text-brand transition-colors">Chargers</Link>
-        <Link to="/bookings" className="text-sm text-slate-600 hover:text-brand transition-colors">My Bookings</Link>
-        <Link to="/sessions" className="text-sm text-slate-600 hover:text-brand transition-colors">Sessions</Link>
+        {isAdmin ? (
+          <Link to="/admin" className="text-sm text-slate-600 hover:text-brand transition-colors">Admin Dashboard</Link>
+        ) : (
+          <>
+            <Link to="/chargers" className="text-sm text-slate-600 hover:text-brand transition-colors">Chargers</Link>
+            <Link to="/bookings" className="text-sm text-slate-600 hover:text-brand transition-colors">My Bookings</Link>
+            <Link to="/sessions" className="text-sm text-slate-600 hover:text-brand transition-colors">Sessions</Link>
+            <Link to="/invoices" className="text-sm text-slate-600 hover:text-brand transition-colors">Invoices</Link>
+          </>
+        )}
       </div>
       <div className="flex items-center gap-4">
         <span className="text-sm text-slate-700">

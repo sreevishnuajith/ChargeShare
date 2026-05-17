@@ -411,6 +411,94 @@ Continued and completed the main round of testing today.
 
 ---
 
+## Phase 4 — Tasks 7–9: Billing, Admin Dashboard, and Notifications (16 May 2026)
+
+### Saturday 16 May 2026
+
+**Task 7 — Develop billing and invoicing (COMPLETE)**
+
+Built the full invoice system today, both on the backend and the frontend.
+
+**Backend — invoice routes (`apps/backend/src/routes/invoices.js`):**
+- `GET /invoices/me` — returns all invoices for the logged-in resident, ordered by period start date
+- `POST /invoices/generate` — admin-only endpoint that accepts a date range, finds all completed sessions in that period, aggregates the total cost per resident, and creates one invoice per resident in a single database transaction
+- `PUT /invoices/:id/status` — admin-only endpoint to mark an invoice as DRAFT, SENT, or PAID
+- `GET /invoices/` — admin-only list of all invoices across all residents
+
+The invoice generation logic first queries all completed sessions whose end time falls within the billing period, groups them by user, calculates the total cost for each user, and inserts the invoices in one atomic transaction. If no sessions exist for the period, the endpoint returns immediately with zero created invoices.
+
+**Frontend — My Invoices page (`apps/frontend/src/pages/InvoicesPage.jsx`):**
+- Lists all invoices for the logged-in resident
+- Each invoice card shows the invoice number, billing period, issue date, total amount, and current status
+- Status is displayed as a colour-coded badge: grey for DRAFT, amber for SENT, teal for PAID
+- Empty state message shown if no invoices have been generated yet
+
+**Wiring:**
+- `GET /invoices/me` mounted on the resident protected route
+- Invoices link added to the navigation bar for resident users
+- Dashboard card updated from "Coming soon" to a live link to `/invoices`
+
+---
+
+**Task 8 — Build admin dashboard and charts (COMPLETE)**
+
+Built the full admin dashboard today with summary statistics and three Chart.js visualisations.
+
+**Backend — admin routes (`apps/backend/src/routes/admin.js`):**
+- `GET /admin/dashboard` — returns:
+  - Summary stats: total resident count, total bookings, completed sessions, total energy delivered (kWh), total revenue (AUD)
+  - Daily stats for the last 14 days: sessions per day, revenue per day, energy per day — used to power the charts
+  - Charger utilisation: count of completed sessions per charger
+- `GET /admin/users` — full list of resident accounts with booking and invoice counts
+- `GET /admin/sessions` — all sessions with user and charger details
+
+All admin routes are protected by an inline middleware that checks the user's role from the JWT. Non-admins receive a 403 response.
+
+**Frontend — Admin Dashboard page (`apps/frontend/src/pages/AdminDashboardPage.jsx`):**
+- Summary stat cards at the top: Residents, Bookings, Sessions, Total Energy, Total Revenue
+- Three Chart.js visualisations:
+  1. Bar chart — sessions per day over the last 14 days (teal bars)
+  2. Line chart — revenue per day in AUD over the last 14 days (filled area chart)
+  3. Bar chart — charger utilisation: completed sessions per charger (indigo bars)
+- Invoice management panel: date range pickers to select a billing period and a button to generate invoices; success/error feedback shown inline
+- Invoices table: all invoices with a status dropdown per row so the admin can update DRAFT → SENT → PAID without leaving the page
+- Residents table: shows each resident's name, email, booking count, and invoice count
+
+**Access control:**
+- Added `AdminRoute` component (`apps/frontend/src/components/AdminRoute.jsx`) — redirects non-admins to the dashboard, redirects unauthenticated users to login
+- Admin users see a simplified navbar with only "Admin Dashboard"; the resident nav links are hidden for admin accounts
+- Admin users see a different dashboard card set: "Admin Dashboard" and "Manage Invoices" instead of the resident feature cards
+
+---
+
+**Task 9 — Implement notifications (COMPLETE)**
+
+Built the email notification system using Nodemailer connected to Mailpit for local development testing.
+
+**Mailer module (`apps/backend/src/mailer.js`):**
+- Nodemailer transport configured for SMTP on localhost:1025 with TLS disabled — this connects directly to Mailpit, which intercepts all outbound emails without delivering them externally
+- Three notification functions:
+  1. `sendBookingConfirmation(user, booking, charger)` — sent when a resident creates a booking; includes charger details, start/end time, and reminder to connect the vehicle before start time
+  2. `sendSessionSummary(user, session, booking, charger)` — sent when the scheduler finalises a completed session; includes energy used (kWh), total cost (AUD), and a note that the charge will appear on the next invoice
+  3. `sendInvoiceNotification(user, invoice)` — sent when the admin generates invoices; includes the billing period and total amount due
+
+All three functions are fire-and-forget — they run asynchronously after the main operation completes so email delivery issues never block the API response. Errors are logged via Pino but do not propagate to the caller.
+
+**Integration points:**
+- Booking creation (`apps/backend/src/routes/bookings.js`) — calls `sendBookingConfirmation` after the booking is saved to the database
+- Session finalisation (`apps/backend/src/scheduler.js`) — calls `sendSessionSummary` after the session is closed and the booking is marked COMPLETED
+- Invoice generation (`apps/backend/src/routes/invoices.js`) — calls `sendInvoiceNotification` for each invoice created
+
+**Testing notifications:**
+- Started Mailpit (`mailpit`) and confirmed it was listening on port 1025
+- Created a new booking and confirmed the booking confirmation email appeared in the Mailpit web UI (http://localhost:8025)
+- Triggered a session completion via the scheduler and confirmed the session summary email appeared in Mailpit
+- Generated an invoice via the admin dashboard and confirmed the invoice notification email appeared for each resident
+
+**Phase 4 complete. Tasks 7, 8, and 9 are all done.**
+
+---
+
 ## Task Progress Updates
 
 | Task | Description | Dates | Status |
@@ -421,10 +509,10 @@ Continued and completed the main round of testing today.
 | 4 | Build database and authentication system | 29 Apr – 1 May | ✅ Done |
 | 5 | Develop booking system | 2 May | ✅ Done |
 | 6 | Implement charging simulation | 3 May | ✅ Done |
-| 7 | Develop billing and invoicing | TBD | ⏳ Upcoming |
-| 8 | Build admin dashboard and charts | TBD | ⏳ Upcoming |
-| 9 | Implement notifications | TBD | ⏳ Upcoming |
-| 10 | Testing and user feedback | 9–10 May | 🔄 In Progress |
+| 7 | Develop billing and invoicing | 16 May | ✅ Done |
+| 8 | Build admin dashboard and charts | 16 May | ✅ Done |
+| 9 | Implement notifications | 16 May | ✅ Done |
+| 10 | Testing and user feedback | 9–10 May | ✅ Done |
 | 11 | Documentation and process diary | Ongoing | 🔄 In Progress |
 | 12 | Presentation preparation | TBD | ⏳ Upcoming |
 | 13 | Final review and submission | By 25 May | ⏳ Upcoming |

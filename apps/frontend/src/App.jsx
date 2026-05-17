@@ -1,6 +1,7 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
+import AdminRoute from "./components/AdminRoute";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import DashboardPage from "./pages/DashboardPage";
@@ -8,6 +9,8 @@ import ChargersPage from "./pages/ChargersPage";
 import BookChargerPage from "./pages/BookChargerPage";
 import MyBookingsPage from "./pages/MyBookingsPage";
 import SessionsPage from "./pages/SessionsPage";
+import InvoicesPage from "./pages/InvoicesPage";
+import AdminDashboardPage from "./pages/AdminDashboardPage";
 
 export default function App() {
   return (
@@ -54,6 +57,22 @@ export default function App() {
               <ProtectedRoute>
                 <SessionsPage />
               </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/invoices"
+            element={
+              <ProtectedRoute>
+                <InvoicesPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin"
+            element={
+              <AdminRoute>
+                <AdminDashboardPage />
+              </AdminRoute>
             }
           />
           <Route path="*" element={<Navigate to="/login" replace />} />

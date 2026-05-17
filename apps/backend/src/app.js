@@ -7,6 +7,8 @@ import authRouter from "./routes/auth.js";
 import chargersRouter from "./routes/chargers.js";
 import bookingsRouter from "./routes/bookings.js";
 import sessionsRouter from "./routes/sessions.js";
+import invoicesRouter from "./routes/invoices.js";
+import adminRouter from "./routes/admin.js";
 
 const app = express();
 
@@ -27,5 +29,7 @@ app.use("/auth", authRouter);
 app.use("/chargers", chargersRouter);
 app.use("/bookings", bookingsRouter);
 app.use("/sessions", sessionsRouter);
+app.use("/invoices", invoicesRouter);
+app.use("/admin", adminRouter);
 
 export default app;
